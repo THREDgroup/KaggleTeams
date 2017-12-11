@@ -1,16 +1,16 @@
 import numpy
-import kagan
+import utils
 
 # Set constants
 minimum_true_teams = 10
 minimum_indiv_teams = 10
 
 # Load data
-submissions = kagan.load_csv('./meta-kaggle/Submissions.csv', 6)
-competitions = kagan.load_csv('./meta-kaggle/Competitions.csv', 2)
-users = kagan.load_csv('./meta-kaggle/Users.csv', 3)
-teams = kagan.load_csv('./meta-kaggle/Teams.csv', 6)
-team_memberships = kagan.load_csv('./meta-kaggle/TeamMemberships.csv', 3)
+submissions = utils.load_csv('./meta-kaggle/Submissions.csv', 6)
+competitions = utils.load_csv('./meta-kaggle/Competitions.csv', 2)
+users = utils.load_csv('./meta-kaggle/Users.csv', 3)
+teams = utils.load_csv('./meta-kaggle/Teams.csv', 6)
+team_memberships = utils.load_csv('./meta-kaggle/TeamMemberships.csv', 3)
 
 # For each team make a userlist and for each competiton a teamlist
 for competitionkey in competitions:

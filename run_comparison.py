@@ -1,31 +1,9 @@
 import numpy
-import scipy.stats
 import matplotlib.pyplot
-import kagan
+import utils
 
 p = 0.05
 good_competitions = numpy.load("good_competitions.npz")["good_competitions"]
-
-ibt = 0
-tbi = 0
-ibr = 0
-rbi = 0
-tbr = 0
-rbt = 0
-
-ibte = 0
-tbie = 0
-ibre = 0
-rbie = 0
-tbre = 0
-rbte = 0
-
-ibtet = 0
-tbiet = 0
-ibret = 0
-rbiet = 0
-tbret = 0
-rbtet = 0
 
 real_team_scores_all = []
 indiv_team_scores_all = []
@@ -78,16 +56,13 @@ for competition in good_competitions:
 
     # Normalize values according to mean and standard distribution
     mm = numpy.mean(indiv_team_mefforts)
-    # sm = numpy.std(real_team_mefforts + indiv_team_mefforts)
     real_team_mefforts = [x/mm for x in real_team_mefforts]
     indiv_team_mefforts = [x/mm for x in indiv_team_mefforts]
 
     # Normalize values according to mean and standard distribution
     mm = numpy.mean(indiv_team_tefforts)
-    # sm = numpy.std(real_team_tefforts + indiv_team_tefforts)
     real_team_tefforts = [x/mm for x in real_team_tefforts]
     indiv_team_tefforts = [x/mm for x in indiv_team_tefforts]
-
 
     # Get scores for teams resampled from individuals
     remixed_team_scores = []
@@ -129,11 +104,11 @@ matplotlib.pyplot.plot(numpy.mean(real_team_tefforts_all), -numpy.mean(real_team
 matplotlib.pyplot.plot(numpy.mean(remixed_team_tefforts_all), -numpy.mean(remixed_team_scores_all), 'g^')
 
 delta = 0.1
-kagan.plot_slope(numpy.array([0.9, 1.1]), indiv_team_tefforts_all, indiv_team_scores_all, 'r-')
-kagan.plot_slope(numpy.mean(real_team_tefforts_all)+[-delta, delta], real_team_tefforts_all, real_team_scores_all, 'b-')
-kagan.plot_slope(numpy.mean(remixed_team_tefforts_all)+[-delta, delta], remixed_team_tefforts_all, remixed_team_scores_all, 'g-')
-kagan.plot_slope(numpy.array([1.0, numpy.mean(remixed_team_tefforts_all)]), indiv_team_tefforts_all, indiv_team_scores_all, 'r:')
-kagan.plot_slope(numpy.array([numpy.mean(real_team_tefforts_all)-delta, numpy.mean(remixed_team_tefforts_all)]), real_team_tefforts_all, real_team_scores_all, 'b:')
+utils.plot_slope(numpy.array([0.9, 1.1]), indiv_team_tefforts_all, indiv_team_scores_all, 'r-')
+utils.plot_slope(numpy.mean(real_team_tefforts_all)+[-delta, delta], real_team_tefforts_all, real_team_scores_all, 'b-')
+utils.plot_slope(numpy.mean(remixed_team_tefforts_all)+[-delta, delta], remixed_team_tefforts_all, remixed_team_scores_all, 'g-')
+utils.plot_slope(numpy.array([1.0, numpy.mean(remixed_team_tefforts_all)]), indiv_team_tefforts_all, indiv_team_scores_all, 'r:')
+utils.plot_slope(numpy.array([numpy.mean(real_team_tefforts_all)-delta, numpy.mean(remixed_team_tefforts_all)]), real_team_tefforts_all, real_team_scores_all, 'b:')
 
 # Add legend and labels
 matplotlib.pyplot.legend(["Individuals", "True Teams", "Nominal Teams"])

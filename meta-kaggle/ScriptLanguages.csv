@@ -1,11 +1,3 @@
-"Id","Name","AceLanguageName","DefaultScriptFileName","DockerImageName","AllowWrite","AllowView","BaseScriptLanguageId","RenderedScriptLanguageId","NotebookKernelMetadata","IsNotebook","GlobalDefaultScriptId","DisplayName"
-1,"R","r","script.R","kaggle/rstats",True,True,"","","",False,"33153.0","R"
-2,"Python","python","script.py","kaggle/python",True,True,"","","",False,"33156.0","Python"
-5,"RMarkdown","markdown","script.Rmd","kaggle/rstats",True,True,"","","",False,"33158.0","R"
-6,"Julia","julia","script.jl","kaggle/julia",True,True,"","","",False,"33157.0","Julia"
-7,"SQLite","sql","script.sql","kaggle/python",True,True,"","","",False,"33147.0","SQLite"
-8,"IPython Notebook","python","script.xpynb","kaggle/python",True,False,"2.0","9.0","{""display_name"":""Python 3"",""language"":""python"",""name"":""python3""}",True,"33156.0","Python"
-9,"IPython Notebook HTML","python","script.ipynb","kaggle/python",False,True,"","","",False,"","Python"
-10,"IJulia Notebook HTML","julia","script.ijlnb","kaggle/julia",False,True,"","","",False,"","Julia"
-12,"R Notebook HTML","r","script.irnb","kaggle/rstats",False,True,"","","",False,"","R"
-13,"R Notebook","r","script.xrnb","kaggle/rstats",True,False,"1.0","12.0","{""display_name"":""R"",""language"":""R"",""name"":""ir""}",True,"33153.0","R"
+version https://git-lfs.github.com/spec/v1
+oid sha256:a2c27ec85dcdf534f9f73a47cbf0dcc44895633c3dba59c44979b8d5665760c8
+size 1297
