@@ -106,8 +106,6 @@ def nominal_teams(good_competitions):
 
     total = len(good_competitions)
 
-    matplotlib.pyplot.figure()
-
     matplotlib.pyplot.plot(numpy.mean(indiv_team_tefforts_all), -numpy.mean(indiv_team_scores_all), 'rs')
     matplotlib.pyplot.plot(numpy.mean(real_team_tefforts_all), -numpy.mean(real_team_scores_all), 'bo')
     matplotlib.pyplot.plot(numpy.mean(nominal_team_tefforts_all), -numpy.mean(nominal_team_scores_all), 'g^')
@@ -133,6 +131,3 @@ def nominal_teams(good_competitions):
     matplotlib.pyplot.legend(["Individuals", "True Teams", "Nominal Teams"])
     matplotlib.pyplot.xlabel("Total Submissions (Normalized)")
     matplotlib.pyplot.ylabel("Quality of Best Solution (Normalized)")
-
-    # Show results
-    matplotlib.pyplot.show()

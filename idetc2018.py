@@ -1,4 +1,5 @@
 import kaggle_analysis
+import matplotlib.pyplot
 
 
 # Define minimum values for an acceptable competition
@@ -10,3 +11,5 @@ competition_info = kaggle_analysis.preprocessing.extract_good_teams(minimum_true
 
 # Compare nominal teams to true teams and individuals
 kaggle_analysis.analysis.nominal_teams(competition_info)
+
+matplotlib.pyplot.show()
