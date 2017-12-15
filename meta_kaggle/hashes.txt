@@ -1,0 +1,29 @@
+Current git commit:
+3b4c013b8324431040f80626a6e632ccc1dd236b
+
+Current output md5 hashes:
+MD5 (output/CompetitionHostSegments.csv) = d712e8c4490c76d0c0a95ca63acffa4f
+MD5 (output/Competitions.csv) = db8cac623203528cbb2157aa90fe3d6e
+MD5 (output/DatasetVersions.csv) = 0281ae18adff14f977a1f9e2849bf064
+MD5 (output/Datasets.csv) = 8e6325d1e8f084a345fa1b21044b5f4e
+MD5 (output/EvaluationAlgorithms.csv) = 101be17692d007c1f2e9e78070e1d49f
+MD5 (output/ForumMessages.csv) = 15ed473527189237f58ad4e938e3f62c
+MD5 (output/ForumTopics.csv) = fd7611f3cb5fc37482b1ddca8d0a5e65
+MD5 (output/Forums.csv) = 90d4fe6443e7846d1f0128ba24ad6804
+MD5 (output/RewardTypes.csv) = 1944a1b67004ac50fd862f14f80f6551
+MD5 (output/ScriptLanguages.csv) = b6977948ea34f6bb2dda25d416340706
+MD5 (output/ScriptProjects.csv) = 6672d74bd68a42216d8890cb4fc13059
+MD5 (output/ScriptRunOutputFileExtensions.csv) = b2a8799fd7a4232f6caa754b7d33afc4
+MD5 (output/ScriptRunOutputFileGroups.csv) = e5932d35bc2095c4c3481957c4e2edeb
+MD5 (output/ScriptRunOutputFiles.csv) = 10335a9fc3327012848cf8b749bed8c9
+MD5 (output/ScriptRuns.csv) = b6d8ee022c5ef6a028aa73f7438fdfbb
+MD5 (output/ScriptVersions.csv) = 6310828ba1af78bbb8498ad10f0737ec
+MD5 (output/ScriptVotes.csv) = f87b89dd54f7fa40a01ba0f1de1836ad
+MD5 (output/Scripts.csv) = 6e175bbe94ccb59fe06935c7e6a94ece
+MD5 (output/Sites.csv) = cbf42beb01a2847a36f3a9bf177d5144
+MD5 (output/Submissions.csv) = 038a1855108bc7939314b94fcf2a0bd9
+MD5 (output/TeamMemberships.csv) = fdbcbc896eac2187a4c15668faf6bab7
+MD5 (output/Teams.csv) = 6a989c759600408c0e035a816bfe7673
+MD5 (output/Users.csv) = 1bf06295747b73810bd5f1e370cc808e
+MD5 (output/ValidationSets.csv) = 3d504a195d4219ef9be984362e12cb6b
+MD5 (output/database.sqlite) = 88dd5fd89d590e316d3eb6d6f65355d9
