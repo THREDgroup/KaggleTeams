@@ -7,13 +7,13 @@ good_competitions = numpy.load("good_competitions.npz")["good_competitions"]
 
 real_team_scores_all = []
 indiv_team_scores_all = []
-remixed_team_scores_all = []
+nominal_team_scores_all = []
 real_team_mefforts_all = []
 indiv_team_mefforts_all = []
-remixed_team_mefforts_all = []
+nominal_team_mefforts_all = []
 real_team_tefforts_all = []
 indiv_team_tefforts_all = []
-remixed_team_tefforts_all = []
+nominal_team_tefforts_all = []
 
 for competition in good_competitions:
     real_team_scores = []
@@ -22,7 +22,6 @@ for competition in good_competitions:
     indiv_team_mefforts = []
     real_team_tefforts = []
     indiv_team_tefforts = []
-
 
     # Check directionality
     diffscore = competition["team_list"][0]["Score"] - competition["team_list"][1]["Score"]
@@ -65,35 +64,34 @@ for competition in good_competitions:
     indiv_team_tefforts = [x/mm for x in indiv_team_tefforts]
 
     # Get scores for teams resampled from individuals
-    remixed_team_scores = []
-    remixed_team_mefforts = []
-    remixed_team_tefforts = []
+    nominal_team_scores = []
+    nominal_team_mefforts = []
+    nominal_team_tefforts = []
     for _ in range(int(0.5*len(competition["team_list"]))):
         # Choose a team size
         team_size = numpy.random.choice(competition["real_team_sizes"])
 
         # Get remixed average effort
         efforts = numpy.random.choice(indiv_team_mefforts, team_size, replace=False)
-        remixed_team_mefforts.append(numpy.mean(efforts))
-        remixed_team_tefforts.append(numpy.sum(efforts))
+        nominal_team_mefforts.append(numpy.mean(efforts))
+        nominal_team_tefforts.append(numpy.sum(efforts))
 
         # Get remixed scores
         scores = numpy.random.choice(indiv_team_scores, team_size, replace=False)
-        remixed_team_scores.append(numpy.min(scores))
-
+        nominal_team_scores.append(numpy.min(scores))
 
     # Save sores
     real_team_scores_all += real_team_scores
     indiv_team_scores_all += indiv_team_scores
-    remixed_team_scores_all += remixed_team_scores
+    nominal_team_scores_all += nominal_team_scores
 
     real_team_mefforts_all += real_team_mefforts
     indiv_team_mefforts_all += indiv_team_mefforts
-    remixed_team_mefforts_all += remixed_team_mefforts
+    nominal_team_mefforts_all += nominal_team_mefforts
 
     real_team_tefforts_all += real_team_tefforts
     indiv_team_tefforts_all += indiv_team_tefforts
-    remixed_team_tefforts_all += remixed_team_tefforts
+    nominal_team_tefforts_all += nominal_team_tefforts
 
 total = len(good_competitions)
 
@@ -101,14 +99,24 @@ matplotlib.pyplot.figure()
 
 matplotlib.pyplot.plot(numpy.mean(indiv_team_tefforts_all), -numpy.mean(indiv_team_scores_all), 'rs')
 matplotlib.pyplot.plot(numpy.mean(real_team_tefforts_all), -numpy.mean(real_team_scores_all), 'bo')
-matplotlib.pyplot.plot(numpy.mean(remixed_team_tefforts_all), -numpy.mean(remixed_team_scores_all), 'g^')
+matplotlib.pyplot.plot(numpy.mean(nominal_team_tefforts_all), -numpy.mean(nominal_team_scores_all), 'g^')
 
 delta = 0.1
-utils.plot_slope(numpy.array([0.9, 1.1]), indiv_team_tefforts_all, indiv_team_scores_all, 'r-')
-utils.plot_slope(numpy.mean(real_team_tefforts_all)+[-delta, delta], real_team_tefforts_all, real_team_scores_all, 'b-')
-utils.plot_slope(numpy.mean(remixed_team_tefforts_all)+[-delta, delta], remixed_team_tefforts_all, remixed_team_scores_all, 'g-')
-utils.plot_slope(numpy.array([1.0, numpy.mean(remixed_team_tefforts_all)]), indiv_team_tefforts_all, indiv_team_scores_all, 'r:')
-utils.plot_slope(numpy.array([numpy.mean(real_team_tefforts_all)-delta, numpy.mean(remixed_team_tefforts_all)]), real_team_tefforts_all, real_team_scores_all, 'b:')
+utils.plot_slope(numpy.array([0.9, 1.1]),
+                 indiv_team_tefforts_all,
+                 indiv_team_scores_all, 'r-')
+utils.plot_slope(numpy.mean(real_team_tefforts_all)+[-delta, delta],
+                 real_team_tefforts_all,
+                 real_team_scores_all, 'b-')
+utils.plot_slope(numpy.mean(nominal_team_tefforts_all)+[-delta, delta],
+                 nominal_team_tefforts_all,
+                 nominal_team_scores_all, 'g-')
+utils.plot_slope(numpy.array([1.0, numpy.mean(nominal_team_tefforts_all)]),
+                 indiv_team_tefforts_all,
+                 indiv_team_scores_all, 'r:')
+utils.plot_slope(numpy.array([numpy.mean(real_team_tefforts_all)-delta, numpy.mean(nominal_team_tefforts_all)]),
+                 real_team_tefforts_all,
+                 real_team_scores_all, 'b:')
 
 # Add legend and labels
 matplotlib.pyplot.legend(["Individuals", "True Teams", "Nominal Teams"])

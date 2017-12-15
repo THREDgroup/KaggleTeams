@@ -67,4 +67,3 @@ for competitionkey in competitions:
 numpy.savez('good_competitions.npz', good_competitions=good_competitions)
 
 print(len(good_competitions))
-

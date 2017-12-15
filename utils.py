@@ -6,16 +6,16 @@ import scipy.stats
 
 
 # Define function for loading data
-def load_csv(file: str, nc: int) -> dict:
+def load_csv(csv_file_name: str, number_of_columns: int) -> dict:
     d = {}
-    with open(file, "r") as f:
+    with open(csv_file_name, "r") as f:
         the_file = csv.reader(f, delimiter=',')
         for idx, line in enumerate(the_file):
             if idx is 0:
                 headings = line
             else:
                 temp = {}
-                for i in range(0, nc):
+                for i in range(0, number_of_columns):
                     if "Id" in headings[i]:
                         try:
                             temp[headings[i]] = int(line[i])
