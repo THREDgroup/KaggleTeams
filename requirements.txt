@@ -1,0 +1,6 @@
+numpy
+csv
+scipy
+matplotlib
+typing
+pkg_resources
