@@ -1,1 +1,1 @@
-See [the docs](https://hsdl.github.io/Kaggle-Teams/) for more information.
+See [the docs](https://hsdl.github.io/KaggleTeams/) for more information.
