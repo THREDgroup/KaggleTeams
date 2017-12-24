@@ -3,9 +3,9 @@ import typing
 import scipy.stats
 import os
 import matplotlib
-if os.environ.get('DISPLAY', '') == '':
-    print('no display found. Using non-interactive Agg backend')
-    matplotlib.use('Agg')
+# if os.environ.get('DISPLAY', '') == '':
+#     print('no display found. Using non-interactive Agg backend')
+#     matplotlib.use('Agg')
 import matplotlib.pyplot
 
 
@@ -19,7 +19,23 @@ def plot_slope(x: numpy.ndarray,
     matplotlib.pyplot.plot(x, y, format_string)
 
 
+def plot_team_size_histogram(competitions):
+    matplotlib.pyplot.figure()
+
+    all_team_sizes = []
+    for competition in competitions:
+        all_team_sizes += competition["real_team_sizes"]
+        all_team_sizes += [1]*(len(competition["team_list"]) - len(competition["real_team_sizes"]))
+
+    matplotlib.pyplot.yscale('log')
+    matplotlib.pyplot.hist(all_team_sizes, bins=range(min(all_team_sizes), max(all_team_sizes)+1), align='left')
+    matplotlib.pyplot.xlabel('Team Size')
+    matplotlib.pyplot.ylabel('Count')
+    matplotlib.pyplot.show()
+
+
 def nominal_teams(good_competitions):
+    matplotlib.pyplot.figure()
 
     real_team_scores_all = []
     indiv_team_scores_all = []
@@ -111,9 +127,12 @@ def nominal_teams(good_competitions):
 
     total = len(good_competitions)
 
-    matplotlib.pyplot.plot(numpy.mean(indiv_team_tefforts_all), -numpy.mean(indiv_team_scores_all), 'rs')
-    matplotlib.pyplot.plot(numpy.mean(real_team_tefforts_all), -numpy.mean(real_team_scores_all), 'bo')
-    matplotlib.pyplot.plot(numpy.mean(nominal_team_tefforts_all), -numpy.mean(nominal_team_scores_all), 'g^')
+    matplotlib.pyplot.errorbar(numpy.mean(indiv_team_tefforts_all), -numpy.mean(indiv_team_scores_all),
+                               scipy.stats.sem(indiv_team_tefforts_all), scipy.stats.sem(indiv_team_scores_all), 'rs')
+    matplotlib.pyplot.errorbar(numpy.mean(real_team_tefforts_all), -numpy.mean(real_team_scores_all),
+                               scipy.stats.sem(indiv_team_tefforts_all), scipy.stats.sem(indiv_team_scores_all), 'bo')
+    matplotlib.pyplot.errorbar(numpy.mean(nominal_team_tefforts_all), -numpy.mean(nominal_team_scores_all),
+                               scipy.stats.sem(indiv_team_tefforts_all), scipy.stats.sem(indiv_team_scores_all), 'g^')
 
     delta = 0.1
     plot_slope(numpy.array([0.9, 1.1]),
@@ -133,6 +152,9 @@ def nominal_teams(good_competitions):
                real_team_scores_all, 'b:')
 
     # Add legend and labels
-    matplotlib.pyplot.legend(["Individuals", "True Teams", "Nominal Teams"])
+    matplotlib.pyplot.legend(["Individuals (n="+str(len(indiv_team_scores_all))+")",
+                              "True Teams (n="+str(len(real_team_scores_all))+")",
+                              "Nominal Teams (n="+str(len(nominal_team_scores_all))+")"])
     matplotlib.pyplot.xlabel("Total Submissions (Normalized)")
     matplotlib.pyplot.ylabel("Quality of Best Solution (Normalized)")
+    matplotlib.pyplot.show()
