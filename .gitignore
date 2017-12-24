@@ -2,3 +2,5 @@
 .idea*
 *.npz
 *.pyc
+*.png
+meta_kaggle

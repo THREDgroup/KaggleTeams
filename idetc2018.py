@@ -1,6 +1,5 @@
 import kaggle_analysis
 
-
 # Define minimum values for an acceptable competition
 minimum_true_teams = 10
 minimum_solo_individuals = 10

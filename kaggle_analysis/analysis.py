@@ -3,9 +3,9 @@ import typing
 import scipy.stats
 import os
 import matplotlib
-if os.environ.get('DISPLAY', '') == '':
-    print('no display found. Using non-interactive Agg backend')
-    matplotlib.use('Agg')
+# if os.environ.get('DISPLAY', '') == '':
+#     print('no display found. Using non-interactive Agg backend')
+#     matplotlib.use('Agg')
 import matplotlib.pyplot
 
 
@@ -31,7 +31,7 @@ def plot_team_size_histogram(competitions):
     matplotlib.pyplot.hist(all_team_sizes, bins=range(min(all_team_sizes), max(all_team_sizes)+1), align='left')
     matplotlib.pyplot.xlabel('Team Size')
     matplotlib.pyplot.ylabel('Count')
-    matplotlib.pyplot.show()
+    matplotlib.pyplot.savefig("./paper/figures/team_histogram.png")
 
 
 def nominal_teams(good_competitions):
@@ -138,4 +138,4 @@ def nominal_teams(good_competitions):
 
     matplotlib.pyplot.xlabel("Total Submissions (Normalized)")
     matplotlib.pyplot.ylabel("Quality of Best Solution (Normalized)")
-    matplotlib.pyplot.show()
+    matplotlib.pyplot.savefig("./paper/figures/nominal_teams.png")

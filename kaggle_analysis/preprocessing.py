@@ -1,12 +1,31 @@
 import numpy
 import csv
 import pkg_resources
+import os
+import requests
+import zipfile
+import io
+
+
+# Check the setup
+def check_setup():
+    if not os.path.exists('./meta_kaggle/'):
+        os.mkdir('meta_kaggle')
+        os.chdir('./meta_kaggle')
+        zip_file_url = "https://storage.googleapis.com/kaggle-datasets/9/167/meta-kaggle.zip?GoogleAccessId=web-data@kaggle-161607.iam.gserviceaccount.com&Expires=1514347854&Signature=KUUd9GSjps2JYGGBIvlg794%2FdJU54kqqHqxiDs1GqKTuJYgRpp86axurm2PS44DlNzYoXqofZ09atAvZjaEkL2JMfJyZnmC0fj0n%2FCa%2Bflb%2FdtzbYpiUrZqrP%2FZ94LPqn%2FtR538lPxVA%2BXP4fWYjs9qUuv8Hl7xQLgWYNdavve3pcrVAQbYqfzVjigWeAvL5jTGnXoOCl81qzVKwEmtt8mrWekmHF%2FA1tMoVjrkMnZUb62bzKpqIo%2BPVxQivMet%2F%2Fxxo237Slc4WrqOL0zmpe759W9ysybUFfA42zAVFZ4BF0f1jW%2BmaJKemXTUc4xF2w6HeTayBTFRXBBvjlxdCtg%3D%3D"
+        r = requests.get(zip_file_url)
+        z = zipfile.ZipFile(io.BytesIO(r.content))
+        z.extractall()
+        os.chdir('..')
+    if not os.path.exists('./meta_kaggle/__init__.py'):
+        open('./meta_kaggle/__init__.py', 'a').close()
 
 
 # Define function for loading data
 def load_csv(csv_file_name: str, number_of_columns: int) -> dict:
+    csv_file_path = pkg_resources.resource_filename('meta_kaggle', csv_file_name)
     d = {}
-    with open(csv_file_name, "r") as f:
+    with open(csv_file_path, "r") as f:
         the_file = csv.reader(f, delimiter=',')
         for idx, line in enumerate(the_file):
             if idx is 0:
@@ -32,12 +51,14 @@ def load_csv(csv_file_name: str, number_of_columns: int) -> dict:
 
 
 def extract_good_teams(minimum_true_teams: int, minimum_solo_individuals: int, save_good_competitions: bool=False) -> list:
+    check_setup()
+
     # Load data
-    submissions = load_csv(pkg_resources.resource_filename('meta_kaggle', 'Submissions.csv'), 6)
-    competitions = load_csv(pkg_resources.resource_filename('meta_kaggle', 'Competitions.csv'), 2)
-    users = load_csv(pkg_resources.resource_filename('meta_kaggle', 'Users.csv'), 3)
-    teams = load_csv(pkg_resources.resource_filename('meta_kaggle', 'Teams.csv'), 6)
-    team_memberships = load_csv(pkg_resources.resource_filename('meta_kaggle', 'TeamMemberships.csv'), 3)
+    submissions = load_csv('Submissions.csv', 6)
+    competitions = load_csv('Competitions.csv', 2)
+    users = load_csv('Users.csv', 3)
+    teams = load_csv('Teams.csv', 6)
+    team_memberships = load_csv('TeamMemberships.csv', 3)
 
     # For each team make a userlist and for each competiton a teamlist
     for competitionkey in competitions:
