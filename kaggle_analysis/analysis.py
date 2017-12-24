@@ -11,14 +11,14 @@ matplotlib.pyplot.ioff()
 def plot_slope(x: numpy.ndarray,
                xs: typing.List[typing.Union[int, float]],
                ys: typing.List[typing.Union[int, float]],
-               format_string: str):
+               format_string: str) -> None:
     slope = scipy.stats.pearsonr(numpy.array(xs), -numpy.array(ys))
     b = -numpy.mean(ys) - slope[0]*numpy.mean(xs)
     y = slope[0]*x + b
     matplotlib.pyplot.plot(x, y, format_string)
 
 
-def plot_team_size_histogram(competitions: dict) -> None:
+def plot_team_size_histogram(competitions: list) -> None:
     matplotlib.pyplot.figure()
 
     all_team_sizes = []
@@ -30,10 +30,10 @@ def plot_team_size_histogram(competitions: dict) -> None:
     matplotlib.pyplot.hist(all_team_sizes, bins=range(min(all_team_sizes), max(all_team_sizes)+1), align='left')
     matplotlib.pyplot.xlabel('Team Size')
     matplotlib.pyplot.ylabel('Count')
-    matplotlib.pyplot.savefig(pkg_resources.resource_filename("figures", "team_size_histogram.png"))
+    matplotlib.pyplot.savefig(pkg_resources.resource_filename("kaggle_analysis", "figures/team_size_histogram.png"))
 
 
-def nominal_teams(good_competitions: dict) -> None:
+def nominal_teams(good_competitions: list) -> None:
     matplotlib.pyplot.figure()
 
     real_team_scores_all = []
@@ -137,4 +137,4 @@ def nominal_teams(good_competitions: dict) -> None:
 
     matplotlib.pyplot.xlabel("Total Submissions (Normalized)")
     matplotlib.pyplot.ylabel("Quality of Best Solution (Normalized)")
-    matplotlib.pyplot.savefig(pkg_resources.resource_filename("figures", "nominal_teams.png"))
+    matplotlib.pyplot.savefig(pkg_resources.resource_filename("kaggle_analysis", "figures/nominal_teams.png"))

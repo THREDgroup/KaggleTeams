@@ -8,7 +8,7 @@ import io
 
 
 # Check the setup
-def check_setup():
+def check_setup() -> None:
     if not os.path.exists('./meta_kaggle/'):
         os.mkdir('meta_kaggle')
         os.chdir('./meta_kaggle')
