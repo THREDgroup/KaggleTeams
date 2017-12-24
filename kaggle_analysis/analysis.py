@@ -139,3 +139,5 @@ def nominal_teams(good_competitions):
     matplotlib.pyplot.xlabel("Total Submissions (Normalized)")
     matplotlib.pyplot.ylabel("Quality of Best Solution (Normalized)")
     matplotlib.pyplot.show()
+
+# git filter-branch --force --index-filter 'git rm --cached --ignore-unmatch ./meta_kaggle/' --prune-empty --tag-name-filter cat -- --all
