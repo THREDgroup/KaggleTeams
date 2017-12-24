@@ -30,7 +30,7 @@ def plot_team_size_histogram(competitions: list) -> None:
     matplotlib.pyplot.hist(all_team_sizes, bins=range(min(all_team_sizes), max(all_team_sizes)+1), align='left')
     matplotlib.pyplot.xlabel('Team Size')
     matplotlib.pyplot.ylabel('Count')
-    matplotlib.pyplot.savefig(pkg_resources.resource_filename("kaggle_analysis", "figures/team_size_histogram.png"))
+    matplotlib.pyplot.savefig(pkg_resources.resource_filename("figures", "team_size_histogram.png"))
 
 
 def nominal_teams(good_competitions: list) -> None:
@@ -137,4 +137,4 @@ def nominal_teams(good_competitions: list) -> None:
 
     matplotlib.pyplot.xlabel("Total Submissions (Normalized)")
     matplotlib.pyplot.ylabel("Quality of Best Solution (Normalized)")
-    matplotlib.pyplot.savefig(pkg_resources.resource_filename("kaggle_analysis", "figures/nominal_teams.png"))
+    matplotlib.pyplot.savefig(pkg_resources.resource_filename("figures", "nominal_teams.png"))
