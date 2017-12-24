@@ -3,10 +3,9 @@ import typing
 import scipy.stats
 import os
 import matplotlib
-# if os.environ.get('DISPLAY', '') == '':
-#     print('no display found. Using non-interactive Agg backend')
-#     matplotlib.use('Agg')
+matplotlib.use('Agg')
 import matplotlib.pyplot
+matplotlib.pyplot.ioff()
 
 
 def plot_slope(x: numpy.ndarray,
