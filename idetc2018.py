@@ -25,3 +25,5 @@ matplotlib.pyplot.savefig(pkg_resources.resource_filename("figures", "performanc
 
 # TODO: Probability of winning for each nominal team size divided by team size
 # TODO: Probability of winning for each true team size divided by team size
+# TODO: Plot effort v team size for real teams
+# TODOL Plot effort v performance for
