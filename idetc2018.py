@@ -1,5 +1,4 @@
 import kaggle_analysis
-import matplotlib.pyplot
 
 
 # Define minimum values for an acceptable competition
