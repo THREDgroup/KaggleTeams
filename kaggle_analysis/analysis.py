@@ -40,9 +40,6 @@ def nominal_teams(good_competitions):
     real_team_scores_all = []
     indiv_team_scores_all = []
     nominal_team_scores_all = []
-    real_team_mefforts_all = []
-    indiv_team_mefforts_all = []
-    nominal_team_mefforts_all = []
     real_team_tefforts_all = []
     indiv_team_tefforts_all = []
     nominal_team_tefforts_all = []
@@ -50,8 +47,6 @@ def nominal_teams(good_competitions):
     for competition in good_competitions:
         real_team_scores = []
         indiv_team_scores = []
-        real_team_mefforts = []
-        indiv_team_mefforts = []
         real_team_tefforts = []
         indiv_team_tefforts = []
 
@@ -72,11 +67,9 @@ def nominal_teams(good_competitions):
 
             if len(team["user_list"]) == 1:
                 indiv_team_scores.append(m*team["Score"])
-                indiv_team_mefforts.append(effort)
                 indiv_team_tefforts.append(effort)
             else:
                 real_team_scores.append(m*team["Score"])
-                real_team_mefforts.append(effort/len(team["user_list"]))
                 real_team_tefforts.append(effort)
 
         # Normalize values according to mean and standard distribution
@@ -86,26 +79,19 @@ def nominal_teams(good_competitions):
         indiv_team_scores = [(x-mm)/sm for x in indiv_team_scores]
 
         # Normalize values according to mean and standard distribution
-        mm = numpy.mean(indiv_team_mefforts)
-        real_team_mefforts = [x/mm for x in real_team_mefforts]
-        indiv_team_mefforts = [x/mm for x in indiv_team_mefforts]
-
-        # Normalize values according to mean and standard distribution
         mm = numpy.mean(indiv_team_tefforts)
         real_team_tefforts = [x/mm for x in real_team_tefforts]
         indiv_team_tefforts = [x/mm for x in indiv_team_tefforts]
 
         # Get scores for teams resampled from individuals
         nominal_team_scores = []
-        nominal_team_mefforts = []
         nominal_team_tefforts = []
         for _ in range(int(0.5*len(competition["team_list"]))):
             # Choose a team size
             team_size = numpy.random.choice(competition["real_team_sizes"])
 
             # Get remixed average effort
-            efforts = numpy.random.choice(indiv_team_mefforts, team_size, replace=False)
-            nominal_team_mefforts.append(numpy.mean(efforts))
+            efforts = numpy.random.choice(indiv_team_tefforts, team_size, replace=False)
             nominal_team_tefforts.append(numpy.sum(efforts))
 
             # Get remixed scores
@@ -117,33 +103,32 @@ def nominal_teams(good_competitions):
         indiv_team_scores_all += indiv_team_scores
         nominal_team_scores_all += nominal_team_scores
 
-        real_team_mefforts_all += real_team_mefforts
-        indiv_team_mefforts_all += indiv_team_mefforts
-        nominal_team_mefforts_all += nominal_team_mefforts
-
         real_team_tefforts_all += real_team_tefforts
         indiv_team_tefforts_all += indiv_team_tefforts
         nominal_team_tefforts_all += nominal_team_tefforts
 
-    total = len(good_competitions)
-
     matplotlib.pyplot.errorbar(numpy.mean(indiv_team_tefforts_all), -numpy.mean(indiv_team_scores_all),
                                scipy.stats.sem(indiv_team_tefforts_all), scipy.stats.sem(indiv_team_scores_all), 'rs')
     matplotlib.pyplot.errorbar(numpy.mean(real_team_tefforts_all), -numpy.mean(real_team_scores_all),
-                               scipy.stats.sem(indiv_team_tefforts_all), scipy.stats.sem(indiv_team_scores_all), 'bo')
+                               scipy.stats.sem(real_team_tefforts_all), scipy.stats.sem(real_team_scores_all), 'bo')
     matplotlib.pyplot.errorbar(numpy.mean(nominal_team_tefforts_all), -numpy.mean(nominal_team_scores_all),
-                               scipy.stats.sem(indiv_team_tefforts_all), scipy.stats.sem(indiv_team_scores_all), 'g^')
+                               scipy.stats.sem(nominal_team_tefforts_all), scipy.stats.sem(nominal_team_scores_all), 'g^')
+
+    # Add legend and labels
+    matplotlib.pyplot.legend(["Individuals (n="+str(len(indiv_team_scores_all))+")",
+                              "True Teams (n="+str(len(real_team_scores_all))+")",
+                              "Nominal Teams (n="+str(len(nominal_team_scores_all))+")"])
 
     delta = 0.1
     plot_slope(numpy.array([0.9, 1.1]),
                indiv_team_tefforts_all,
-               indiv_team_scores_all, 'r-')
+               indiv_team_scores_all, 'r:')
     plot_slope(numpy.mean(real_team_tefforts_all)+[-delta, delta],
                real_team_tefforts_all,
-               real_team_scores_all, 'b-')
+               real_team_scores_all, 'b:')
     plot_slope(numpy.mean(nominal_team_tefforts_all)+[-delta, delta],
                nominal_team_tefforts_all,
-               nominal_team_scores_all, 'g-')
+               nominal_team_scores_all, 'g:')
     plot_slope(numpy.array([1.0, numpy.mean(nominal_team_tefforts_all)]),
                indiv_team_tefforts_all,
                indiv_team_scores_all, 'r:')
@@ -151,10 +136,6 @@ def nominal_teams(good_competitions):
                real_team_tefforts_all,
                real_team_scores_all, 'b:')
 
-    # Add legend and labels
-    matplotlib.pyplot.legend(["Individuals (n="+str(len(indiv_team_scores_all))+")",
-                              "True Teams (n="+str(len(real_team_scores_all))+")",
-                              "Nominal Teams (n="+str(len(nominal_team_scores_all))+")"])
     matplotlib.pyplot.xlabel("Total Submissions (Normalized)")
     matplotlib.pyplot.ylabel("Quality of Best Solution (Normalized)")
     matplotlib.pyplot.show()

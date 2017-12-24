@@ -12,4 +12,9 @@ competition_info = kaggle_analysis.preprocessing.extract_good_teams(minimum_true
 kaggle_analysis.analysis.plot_team_size_histogram(competition_info)
 
 # Compare nominal teams to true teams and individuals
-# kaggle_analysis.analysis.nominal_teams(competition_info)
+kaggle_analysis.analysis.nominal_teams(competition_info)
+
+# TODO: Add analysis of performance as function of true team size
+# TODO: Add analysis fo performance as function of nominal team size
+# TODO: Probability of winning for each nominal team size divided by team size
+# TODO: Probability of winning for each true team size divided by team size
