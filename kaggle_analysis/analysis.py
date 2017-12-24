@@ -1,7 +1,7 @@
 import numpy
 import typing
 import scipy.stats
-import os
+import pkg_resources
 import matplotlib
 matplotlib.use('Agg')
 import matplotlib.pyplot
@@ -18,7 +18,7 @@ def plot_slope(x: numpy.ndarray,
     matplotlib.pyplot.plot(x, y, format_string)
 
 
-def plot_team_size_histogram(competitions):
+def plot_team_size_histogram(competitions: dict) -> None:
     matplotlib.pyplot.figure()
 
     all_team_sizes = []
@@ -30,10 +30,10 @@ def plot_team_size_histogram(competitions):
     matplotlib.pyplot.hist(all_team_sizes, bins=range(min(all_team_sizes), max(all_team_sizes)+1), align='left')
     matplotlib.pyplot.xlabel('Team Size')
     matplotlib.pyplot.ylabel('Count')
-    matplotlib.pyplot.savefig("./paper/figures/team_histogram.png")
+    matplotlib.pyplot.savefig(pkg_resources.resource_filename("figures", "team_size_histogram.png"))
 
 
-def nominal_teams(good_competitions):
+def nominal_teams(good_competitions: dict) -> None:
     matplotlib.pyplot.figure()
 
     real_team_scores_all = []
@@ -137,4 +137,4 @@ def nominal_teams(good_competitions):
 
     matplotlib.pyplot.xlabel("Total Submissions (Normalized)")
     matplotlib.pyplot.ylabel("Quality of Best Solution (Normalized)")
-    matplotlib.pyplot.savefig("./paper/figures/nominal_teams.png")
+    matplotlib.pyplot.savefig(pkg_resources.resource_filename("figures", "nominal_teams.png"))
