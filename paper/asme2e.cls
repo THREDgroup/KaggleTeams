@@ -340,14 +340,7 @@
 \setlength{\paperwidth}{8.5in}
 \setlength{\oddsidemargin}{48pt}
 \setlength{\evensidemargin}{48pt}
-% Added by Matt Campbell to make compatible with pdflatex 3/8/2005
-\ifpdf%
-   \setlength{\topmargin}{1.3in}% use 1.3in top margin for pdflatex
-\else
-   \setlength{\topmargin}{2.0in}% use 2.0in top marging for latex - same as original
-\fi
-%\setlength{\topmargin}{2.0in}% original line 
-% End pdflatex section
+\setlength{\topmargin}{1.3in}
 \setlength{\marginparwidth}{0pt}
 \setlength{\marginparsep}{11pt}
 \setlength{\marginparpush}{5pt}
@@ -357,7 +350,7 @@
 \setlength{\headsep}{18pt}
 \setlength{\topskip}{10pt}
 \setlength{\footskip}{24pt}
-\setlength{\textheight}{9.00in}
+\setlength{\textheight}{9.50in}
 \advance\textheight by -\headheight
 \advance\textheight by -\headsep
 \setlength{\textwidth}{7.5in}

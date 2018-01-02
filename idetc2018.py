@@ -23,7 +23,8 @@ kaggle_analysis.analysis.plot_nominal_performance_v_size(indiv_team, 24, 100, "n
 matplotlib.pyplot.legend(['True Teams', 'Nominal Teams'])
 matplotlib.pyplot.savefig(pkg_resources.resource_filename("figures", "performance_v_size.png"))
 
-# TODO: Probability of winning for each nominal team size divided by team size
-# TODO: Probability of winning for each true team size divided by team size
+# TODO: Plot probability of winning for each team size
+# TODO: Plot expected payout for each team size
+# TODO: Plot expected payout per modicum of work
 # TODO: Plot effort v team size for real teams
-# TODOL Plot effort v performance for
+# TODO: Plot effort v performance for

@@ -7,10 +7,10 @@ all:
 	dvips -o asme2e.ps asme2e
 	ps2pdf asme2e.ps asme2e.pdf
 
-abstract:
-	latex abstract
-	dvips -o abstract.ps abstract
-	ps2pdf abstract.ps abstract.pdf
+# abstract:
+# 	latex abstract
+#	dvips -o abstract.ps abstract
+#	ps2pdf abstract.ps abstract.pdf
 
 clean:
 	(rm -rf *.ps *.log *.dvi *.aux *.*% *.lof *.lop *.lot *.toc *.idx *.ilg *.ind *.bbl *blg)
