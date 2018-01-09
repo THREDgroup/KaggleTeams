@@ -20,6 +20,8 @@ kaggle_analysis.analysis.plot_nominal_teams(real_team, indiv_team, nominal_team)
 matplotlib.pyplot.figure()
 kaggle_analysis.analysis.plot_performance_v_size(real_team, indiv_team, "real_team.png")
 kaggle_analysis.analysis.plot_nominal_performance_v_size(indiv_team, 24, 100, "nominal_team.png")
+matplotlib.pyplot.xlabel('Team Size')
+matplotlib.pyplot.ylabel('Quality of Best Solution (Normalized)')
 matplotlib.pyplot.legend(['True Teams', 'Nominal Teams'])
 matplotlib.pyplot.savefig(pkg_resources.resource_filename("figures", "performance_v_size.png"))
 
