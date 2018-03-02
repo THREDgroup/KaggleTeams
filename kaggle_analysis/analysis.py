@@ -140,7 +140,10 @@ def plot_nominal_teams(real_team: tuple, indiv_team: tuple, nominal_team: tuple)
                               "True Teams (n="+str(len(real_team[0]))+")",
                               "Nominal Teams (n="+str(len(nominal_team[0]))+")"])
 
-    delta = 0.1
+    print(scipy.stats.linregress(indiv_team[1], indiv_team[0]))
+    print(scipy.stats.linregress(real_team[1], real_team[0]))
+    print(scipy.stats.linregress(nominal_team[1], nominal_team[0]))
+
     # plot_slope(numpy.array([0.9, 1.1]),
     #            indiv_team[1],
     #            indiv_team[0], 'r:')
@@ -223,10 +226,11 @@ def analyze_nominal_team_performance_v_size(indiv, max_team_size=25, sample_size
 
     return range(1, max_team_size+1), (performance_mean, performance_sem), (effort_mean, effort_sem)
 
-def plot_payout_v_size(team, indiv, max_team_size, sample_size=100, competition_size=100):
+def analyze_payout_v_size(team, indiv, max_team_size, sample_size=100, competition_size=100):
     team_performance = team[0]
     team_effort = team[1]
     team_size = team[2]
+    n = sample_size * sample_size
 
     if indiv is not None:
         team_performance += indiv[0]
@@ -245,6 +249,8 @@ def plot_payout_v_size(team, indiv, max_team_size, sample_size=100, competition_
 
     true_team_win_percentage = []
     true_team_payout = []
+    true_team_win_percentage_error = []
+    true_team_payout_error = []
     for size in max_team_size:
         count = 0
         for i in range(sample_size):
@@ -257,12 +263,18 @@ def plot_payout_v_size(team, indiv, max_team_size, sample_size=100, competition_
                 if your_score < other_scores[j]:
                     count += 1.0
 
-        true_team_win_percentage.append(count / sample_size / sample_size)
-        true_team_payout.append(count / size / sample_size / sample_size)
+        p = count/n
+        error = numpy.sqrt(p*(1-p)/n)
+        true_team_win_percentage.append(p)
+        true_team_win_percentage_error.append(error)
+        true_team_payout.append(p/size)
+        true_team_payout_error.append(error/size)
         print(size)
 
     nominal_team_win_percentage = []
     nominal_team_payout = []
+    nominal_team_win_percentage_error = []
+    nominal_team_payout_error = []
     for size in max_team_size:
         count = 0
         for i in range(sample_size):
@@ -278,8 +290,13 @@ def plot_payout_v_size(team, indiv, max_team_size, sample_size=100, competition_
                 if your_score < other_scores[j]:
                     count += 1.0
 
-        nominal_team_win_percentage.append(count / sample_size / sample_size)
-        nominal_team_payout.append(count / size / sample_size / sample_size)
+        p = count/n
+        error = numpy.sqrt(p*(1-p)/n)
+        nominal_team_win_percentage.append(p)
+        nominal_team_win_percentage_error.append(error)
+        nominal_team_payout.append(p/size)
+        nominal_team_payout_error.append(error/size)
         print(size)
 
-    return true_team_payout, true_team_win_percentage, nominal_team_payout, nominal_team_win_percentage
+    return (true_team_payout, true_team_payout_error), (true_team_win_percentage, true_team_win_percentage_error), \
+           (nominal_team_payout, nominal_team_payout_error), (nominal_team_win_percentage, nominal_team_win_percentage_error)
