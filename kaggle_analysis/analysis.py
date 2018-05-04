@@ -165,7 +165,7 @@ def plot_nominal_teams(real_team: tuple, indiv_team: tuple, nominal_team: tuple)
     matplotlib.pyplot.savefig(pkg_resources.resource_filename("figures", "nominal_teams.png"))
 
 
-def analyze_team_performance_v_size(team, indiv=None, std=True):
+def analyze_team_performance_v_size(team, indiv=None, std=True, pctl=None):
     team_performance = team[0]
     team_effort = team[1]
     team_size = team[2]
@@ -184,10 +184,18 @@ def analyze_team_performance_v_size(team, indiv=None, std=True):
     performance_sem = []
     effort_mean = []
     effort_sem = []
+    all_effort = []
+    all_performance = []
     for size in unique_team_sizes:
         idx = numpy.where(team_size == size)[0]
-        performance_mean.append(-numpy.mean(team_performance[idx]))
-        effort_mean.append(numpy.mean(team_effort[idx]))
+        if pctl is None:
+            performance_mean.append(-numpy.mean(team_performance[idx]))
+            effort_mean.append(numpy.mean(team_effort[idx]))
+            all_performance.append(team_performance[idx])
+            all_effort.append(team_effort[idx])
+        else:
+            performance_mean.append(-numpy.percentile(team_performance[idx], 100-pctl))
+            effort_mean.append(numpy.percentile(team_effort[idx], pctl))
         if std is True:
             performance_sem.append(numpy.std(team_performance[idx]))
             effort_sem.append(numpy.std(team_effort[idx]))
@@ -195,10 +203,10 @@ def analyze_team_performance_v_size(team, indiv=None, std=True):
             performance_sem.append(scipy.stats.sem(team_performance[idx]))
             effort_sem.append(scipy.stats.sem(team_effort[idx]))
 
-    return unique_team_sizes, (performance_mean, performance_sem), (effort_mean, effort_sem)
+    return unique_team_sizes, (performance_mean, performance_sem), (effort_mean, effort_sem), all_performance, all_effort
 
 
-def analyze_nominal_team_performance_v_size(indiv, max_team_size=25, sample_size=100, std=True):
+def analyze_nominal_team_performance_v_size(indiv, max_team_size=25, sample_size=100, std=True, pctl=None):
     indiv_performance = indiv[0]
     indiv_effort = indiv[1]
     indiv_size = indiv[2]
@@ -207,6 +215,8 @@ def analyze_nominal_team_performance_v_size(indiv, max_team_size=25, sample_size
     performance_sem = []
     effort_mean = []
     effort_sem = []
+    all_effort = []
+    all_performance = []
     for size in range(1, max_team_size+1):
         nominal_team_scores = []
         nominal_team_efforts = []
@@ -215,8 +225,15 @@ def analyze_nominal_team_performance_v_size(indiv, max_team_size=25, sample_size
             efforts = numpy.random.choice(indiv_effort, size, replace=False)
             nominal_team_scores.append(numpy.min(scores))
             nominal_team_efforts.append(numpy.sum(efforts))
-        performance_mean.append(-numpy.mean(nominal_team_scores))
-        effort_mean.append(numpy.mean(nominal_team_efforts))
+        if pctl is None:
+            performance_mean.append(-numpy.mean(nominal_team_scores))
+            effort_mean.append(numpy.mean(nominal_team_efforts))
+            all_performance.append(nominal_team_scores)
+            all_effort.append(nominal_team_efforts)
+        else:
+            performance_mean.append(-numpy.percentile(nominal_team_scores, 100-pctl))
+            effort_mean.append(numpy.percentile(nominal_team_efforts, pctl))
+
         if std is True:
             performance_sem.append(numpy.std(nominal_team_scores))
             effort_sem.append(numpy.std(nominal_team_efforts))
@@ -224,7 +241,8 @@ def analyze_nominal_team_performance_v_size(indiv, max_team_size=25, sample_size
             performance_sem.append(scipy.stats.sem(nominal_team_scores))
             effort_sem.append(scipy.stats.sem(nominal_team_efforts))
 
-    return range(1, max_team_size+1), (performance_mean, performance_sem), (effort_mean, effort_sem)
+    return range(1, max_team_size+1), (performance_mean, performance_sem), (effort_mean, effort_sem), all_performance, all_effort
+
 
 def analyze_payout_v_size(team, indiv, max_team_size, sample_size=100, competition_size=100):
     team_performance = team[0]
@@ -298,5 +316,18 @@ def analyze_payout_v_size(team, indiv, max_team_size, sample_size=100, competiti
         nominal_team_payout_error.append(error/size)
         print(size)
 
-    return (true_team_payout, true_team_payout_error), (true_team_win_percentage, true_team_win_percentage_error), \
+    count = 0
+    for i in range(sample_size):
+        # Find a "champion team"
+        your_score = numpy.min(numpy.random.choice(indiv[0], 1, replace=False))
+
+        for j in range(sample_size):
+            # See if we won
+            if your_score < other_scores[j]:
+                count += 1.0
+
+    individual_payout = count / n
+    individual_payout_error = numpy.sqrt(individual_payout * (1 - individual_payout) / n)
+
+    return (individual_payout, individual_payout_error), (true_team_payout, true_team_payout_error), (true_team_win_percentage, true_team_win_percentage_error), \
            (nominal_team_payout, nominal_team_payout_error), (nominal_team_win_percentage, nominal_team_win_percentage_error)

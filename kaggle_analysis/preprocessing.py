@@ -5,6 +5,10 @@ import os
 import requests
 import zipfile
 import io
+import matplotlib
+matplotlib.use('Agg')
+import matplotlib.pyplot
+matplotlib.pyplot.ioff()
 
 
 # Check the setup
@@ -92,6 +96,8 @@ def extract_good_teams(minimum_true_teams: int, minimum_solo_individuals: int, s
 
     # For each team in each competition, analyze users to it
     good_competitions = []
+    real_teams_sum = 0
+    winner_size = []
     for competitionkey in competitions:
         indiv_teams = 0
         team_size = []
@@ -102,6 +108,10 @@ def extract_good_teams(minimum_true_teams: int, minimum_solo_individuals: int, s
             else:
                 real_teams += 1
                 team_size.append(len(team["user_list"]))
+            if team["Ranking"] == 1:
+                ws = len(team["user_list"])
+
+        real_teams_sum += real_teams
 
         competitions[competitionkey]["indiv_team_count"] = indiv_teams
         competitions[competitionkey]["real_team_count"] = real_teams
@@ -109,8 +119,25 @@ def extract_good_teams(minimum_true_teams: int, minimum_solo_individuals: int, s
 
         if real_teams > minimum_true_teams and indiv_teams > minimum_solo_individuals:
             good_competitions.append(competitions[competitionkey])
+            winner_size.append(ws)
 
     if save_good_competitions:
         numpy.savez('good_competitions.npz', good_competitions=good_competitions)
+
+    print("real teams: "+str(real_teams_sum))
+    print(winner_size, len(winner_size))
+    print("winning team sizes: "+str(numpy.mean(numpy.array(winner_size))))
+
+    # Plot winning team sizes histogram
+
+    matplotlib.pyplot.figure()
+
+    all_team_sizes = winner_size
+
+    matplotlib.pyplot.yscale('log')
+    matplotlib.pyplot.hist(all_team_sizes, bins=range(min(all_team_sizes), max(all_team_sizes)+1), align='left')
+    matplotlib.pyplot.xlabel('Team Size')
+    matplotlib.pyplot.ylabel('Count')
+    matplotlib.pyplot.savefig(pkg_resources.resource_filename("figures", "winning_team_size_histogram.png"))
 
     return good_competitions
