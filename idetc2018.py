@@ -8,8 +8,13 @@ import scipy.stats
 minimum_true_teams = 10
 minimum_solo_individuals = 10
 
+# Define how many high/low team comments to pull out
+max_team_comments = 3
+
 # Find acceptable competitions
-competition_info = kaggle_analysis.preprocessing.extract_good_teams(minimum_true_teams, minimum_solo_individuals)
+competition_info = kaggle_analysis.preprocessing.extract_good_teams(minimum_true_teams,
+                                                                    minimum_solo_individuals,
+                                                                    max_team_comments)
 
 # Calculate competition size
 sizes = []

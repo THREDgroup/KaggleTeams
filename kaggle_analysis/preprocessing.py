@@ -54,19 +54,31 @@ def load_csv(csv_file_name: str, number_of_columns: int) -> dict:
     return d
 
 
-def extract_good_teams(minimum_true_teams: int, minimum_solo_individuals: int, save_good_competitions: bool=False) -> list:
+def extract_good_teams(minimum_true_teams: int, minimum_solo_individuals: int, max_team_comments: int, save_good_competitions: bool=False) -> list:
     check_setup()
 
     # Load data
     submissions = load_csv('Submissions.csv', 6)
     competitions = load_csv('Competitions.csv', 2)
+    forums = load_csv('ForumMessages.csv', 6)
     users = load_csv('Users.csv', 3)
     teams = load_csv('Teams.csv', 6)
     team_memberships = load_csv('TeamMemberships.csv', 3)
 
+    # For the forum, make a list of users by comment
+    users_posts = {}
+    for forum_post in forums:
+        if forums[forum_post]["AuthorUserId"] in users_posts:
+            users_posts[forums[forum_post]["AuthorUserId"]].append(forums[forum_post]["Message"])
+        else:
+            users_posts[forums[forum_post]["AuthorUserId"]] = [forums[forum_post]["Message"]]
+
     # For each team make a userlist and for each competiton a teamlist
     for competitionkey in competitions:
         competitions[competitionkey]["team_list"] = []
+        competitions[competitionkey]["top_comment_list"] = []
+        competitions[competitionkey]["bottom_comment_list"] = []
+
     for teamkey in teams:
         teams[teamkey]["user_list"] = {}
 
@@ -99,6 +111,8 @@ def extract_good_teams(minimum_true_teams: int, minimum_solo_individuals: int, s
     real_teams_sum = 0
     winner_size = []
     for competitionkey in competitions:
+        if competitionkey == 2959:
+            continue
         indiv_teams = 0
         team_size = []
         real_teams = 0
@@ -121,8 +135,38 @@ def extract_good_teams(minimum_true_teams: int, minimum_solo_individuals: int, s
             good_competitions.append(competitions[competitionkey])
             winner_size.append(ws)
 
+            for team in competitions[competitionkey]["team_list"]:
+                competition_size = len(competitions[competitionkey]["team_list"])
+
+                if team["Ranking"] <= max_team_comments:
+                    for user in team["user_list"]:
+                        if user in users_posts:
+                            for post in users_posts[user]:
+                                competitions[competitionkey]["top_comment_list"].append(post)
+                if team["Ranking"] > (competition_size - max_team_comments):
+                    for user in team["user_list"]:
+                        if user in users_posts:
+                            for post in users_posts[user]:
+                                competitions[competitionkey]["bottom_comment_list"].append(post)
+
+    # Save good competitions if called for
     if save_good_competitions:
         numpy.savez('good_competitions.npz', good_competitions=good_competitions)
+
+    # Print out the comments if needed
+    with open('top_comments.csv', 'w') as file:
+        for competitionkey in competitions:
+            if len(competitions[competitionkey]["top_comment_list"]) == 0:
+                file.write(str(competitionkey) + ", ----\n")
+            for post in competitions[competitionkey]["top_comment_list"]:
+                file.write(str(competitionkey)+", %s\n" % post.replace('\n', ' ').replace('\r', '').replace(',', ''))
+
+    with open('bottom_comments.csv', 'w') as file:
+        for competitionkey in competitions:
+            if len(competitions[competitionkey]["bottom_comment_list"]) == 0:
+                file.write(str(competitionkey) + ", ----\n")
+            for post in competitions[competitionkey]["bottom_comment_list"]:
+                file.write(str(competitionkey)+", %s\n" % post.replace('\n', ' ').replace('\r', '').replace(',', ''))
 
     print("real teams: "+str(real_teams_sum))
     print(winner_size, len(winner_size))
